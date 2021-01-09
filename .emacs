@@ -73,7 +73,7 @@ where tabs are required"
 (setq elfeed-feeds
       '(
         ;; work
-        ("file:///home/jonas/Dokumente/corona_ha/aufgabenfeed.rss" iserv)
+        ("file:///home/Emily/Dokumente/corona_ha/aufgabenfeed.rss" iserv)
 
         ;; reddit
         ("https://www.reddit.com/r/SinonAssOnline.rss" sinon)
@@ -82,15 +82,15 @@ where tabs are required"
 ))
 (global-set-key (kbd "C-x w") 'elfeed)
 
-;; CompAny tab auto complete & plugins
-; (global-set-key (kbd "TAB") 'company-complete-selection)
-; (global-set-key (kbd "<right>") 'company-complete-common)
+;; ;; CompAny tab auto complete & plugins
+;; (global-set-key (kbd "TAB") 'company-complete-selection)
+;; (global-set-key (kbd "<right>") 'company-complete-common)
 ;; (setq company-dabbrev-downcase nil)
 ;; (setq company-tooltip-idle-delay 0)
 
 ;; (add-hook 'prog-mode-hook 'company-mode)
 
-;; LSP Mode
+;; ;; LSP Mode
 ;; (require 'lsp-mode)
 ;; (add-hook 'c-mode-hook #'lsp)
 ;; (add-hook 'python-mode-hook #'lsp)
@@ -98,18 +98,18 @@ where tabs are required"
 ;; (add-hook 'go-mode-hook #'lsp)
 ;; (add-hook 'javascript-mode-hook #'lsp)
 
-;; LSP gopls (Golang)
+;; ;; LSP gopls (Golang)
 ;; (defun lsp-go-install-save-hooks ()
 ;;   (add-hook 'before-save-hook #'lsp-format-buffer t t)
 ;;   (add-hook 'before-save-hook #'lsp-organize-imports t t))
 ;; (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
 
-;; CompAny fuzzy
+;; ;; CompAny fuzzy
 ;; (setq company-fuzzy-sorting-backend 'alphabetic)
 ;; (setq company-fuzzy-prefix-on-top t)
 ;; (global-company-fuzzy-mode 1)
 
-;; CompAny C Headers (a thing vscodium does really well)
+;; ;; CompAny C Headers (a thing vscodium does really well)
 ;; (add-to-list 'company-backends 'company-c-headers)
 
 (setq inhibit-startup-message t)
