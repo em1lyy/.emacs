@@ -9,6 +9,7 @@
 (global-linum-mode 1)
 (global-visual-line-mode 1)
 (column-number-mode 1)
+(elcord-mode 1)
 
 (defun my-disable-electric-indent ()
     "Disable electric indenting."
@@ -19,7 +20,8 @@
     (progn
       (tool-bar-mode -1)
       (menu-bar-mode -1)
-      (toggle-scroll-bar -1)))
+      (toggle-scroll-bar -1))
+)
 
 (defun use-tabs-in-buffer ()
   "Use tabs instead of spaces in a buffer
@@ -169,7 +171,7 @@ where tabs are required"
      ("#3C3D37" . 100)))
  '(magit-diff-use-overlays nil)
  '(package-selected-packages
-   '(rainbow-delimiters elfeed project-explorer powerline gruvbox-theme monokai-theme paper-theme ox-pandoc moe-theme monokai-pro-theme markdown-mode flymd))
+   '(elcord rainbow-delimiters elfeed project-explorer powerline gruvbox-theme monokai-theme paper-theme ox-pandoc moe-theme monokai-pro-theme markdown-mode flymd))
  '(pdf-view-midnight-colors '("#fdf4c1" . "#282828"))
  '(pos-tip-background-color "#FFFACE")
  '(pos-tip-foreground-color "#272822")
