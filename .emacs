@@ -105,7 +105,7 @@ where tabs are required"
 (setq elfeed-feeds
       '(
         ;; work
-        ("file:///home/jonas/Dokumente/corona_ha/aufgabenfeed.rss" iserv)
+        ("file:///home/Emily/Dokumente/corona_ha/aufgabenfeed.rss" iserv)
 
         ;; reddit
         ("https://www.reddit.com/r/SinonAssOnline.rss" sinon)
@@ -206,3 +206,4 @@ where tabs are required"
  ;; If there is more than one, they won't work right.
  )
 (put 'upcase-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
