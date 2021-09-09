@@ -120,6 +120,9 @@ where tabs are required"
 ;; Some keybinds
 (global-set-key (kbd "C-x C-k C-r") 'revert-buffer)
 
+;; Server
+(server-start)
+
 ;; CompAny tab auto complete & plugins
 ; (global-set-key (kbd "TAB") 'company-complete-selection)
 ; (global-set-key (kbd "<right>") 'company-complete-common)
