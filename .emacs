@@ -84,6 +84,9 @@ where tabs are required"
                               (eval-region-inline)
                               (markdown-eval-inline-lisp)))))))
 
+;; syntax highlighting in markdown code blocks
+(setq markdown-fontify-code-blocks-natively t)
+
 ;; Moe Theme & Moe Powerline
 (require 'powerline)
 (require 'moe-theme)
