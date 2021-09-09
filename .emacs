@@ -233,7 +233,7 @@ where tabs are required"
      ("#3C3D37" . 100)))
  '(magit-diff-use-overlays nil)
  '(package-selected-packages
-   '(elcord rainbow-delimiters elfeed project-explorer powerline gruvbox-theme monokai-theme paper-theme ox-pandoc moe-theme monokai-pro-theme markdown-mode flymd))
+   '(go-mode nim-mode zig-mode mix elixir-mode elcord rainbow-delimiters elfeed project-explorer powerline gruvbox-theme moe-theme markdown-mode))
  '(pdf-view-midnight-colors '("#fdf4c1" . "#282828"))
  '(pos-tip-background-color "#FFFACE")
  '(pos-tip-foreground-color "#272822")
@@ -261,11 +261,11 @@ where tabs are required"
  '(vc-annotate-very-old-color nil)
  '(weechat-color-list
    '(unspecified "#272822" "#3C3D37" "#F70057" "#F92672" "#86C30D" "#A6E22E" "#BEB244" "#E6DB74" "#40CAE4" "#66D9EF" "#FB35EA" "#FD5FF0" "#74DBCD" "#A1EFE4" "#F8F8F2" "#F8F8F0")))
+(put 'upcase-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-(put 'upcase-region 'disabled nil)
-(put 'downcase-region 'disabled nil)
