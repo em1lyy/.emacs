@@ -206,6 +206,36 @@ where tabs are required"
 (global-set-key (kbd "M-p") 'move-line-region-up)
 (global-set-key (kbd "M-n") 'move-line-region-down)
 
+;; Python running, because the python.el built-in version sucks
+;; IMO and is not compatible with my setup and requirements
+
+(defun python-run-current-buffer-file-in-shell ()
+  (interactive)
+  (cond
+   ((string-equal system-type "windows-nt") ; Lots of duplication, but Windows might need additional adjustments/fixes
+    (cond
+     (buffer-file-name
+      (progn
+        (start-process "python-run" "*Python-Run*" "py.exe" "-3" buffer-file-name)
+        (with-current-buffer "*Python-Run*"
+          (linum-mode t)
+          (goto-char (point-min)))
+        (display-buffer "*Python-Run*")))
+     (t (error "Current buffer is not associated with a file"))))
+   ((or (string-equal system-type "gnu/linux") (string-equal system-type "darwin"))
+    (cond
+     (buffer-file-name
+      (progn
+        (start-process "python-run" "*Python-Run*" "sh" "-c" (concat "python3 " buffer-file-name))
+        (with-current-buffer "*Python-Run*"
+          (linum-mode t)
+          (goto-char (point-min)))
+        (display-buffer "*Python-Run*")))
+     (t (error "Current buffer is not associated with a file"))))
+   (t (error "Unsupported platform"))))
+
+(define-key python-mode-map (kbd "C-c C-b") 'python-run-current-buffer-file-in-shell)
+
 (setq inhibit-startup-message t)
 (setq major-mode 'text-mode)
 (setq-default major-mode 'text-mode)
