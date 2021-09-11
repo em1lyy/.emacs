@@ -216,6 +216,7 @@ where tabs are required"
     (cond
      (buffer-file-name
       (progn
+        (save-buffer)
         (start-process "python-run" "*Python-Run*" "py.exe" "-3" buffer-file-name)
         (with-current-buffer "*Python-Run*"
           (linum-mode t)
@@ -226,6 +227,7 @@ where tabs are required"
     (cond
      (buffer-file-name
       (progn
+        (save-buffer)
         (start-process "python-run" "*Python-Run*" "sh" "-c" (concat "python3 " buffer-file-name))
         (with-current-buffer "*Python-Run*"
           (linum-mode t)
