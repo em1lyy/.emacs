@@ -108,7 +108,7 @@ where tabs are required"
 (setq elfeed-feeds
       '(
         ;; work
-        ("file:///home/Emily/Dokumente/corona_ha/aufgabenfeed.rss" iserv)
+        ("file:///home/emily/Dokumente/corona_ha/aufgabenfeed.rss" iserv)
 
         ;; reddit
         ("https://www.reddit.com/r/SinonAssOnline.rss" sinon)
