@@ -238,6 +238,22 @@ where tabs are required"
 
 (define-key python-mode-map (kbd "C-c C-b") 'python-run-current-buffer-file-in-shell)
 
+;; Shell command on buffer
+;;  * Operates on same buffer
+;;  * Replaces contents with output
+;;  * Tries to restore cursor position
+
+(defun shell-command-on-buffer ()
+  (interactive)
+  (let ((line (line-number-at-pos)))
+    ;; replace buffer with output of shell command
+    (shell-command-on-region (point-min) (point-max) (read-shell-command "Shell command on buffer: ") nil t)
+    ;; restore cursor position
+    (goto-line line)
+    (recenter-top-bottom)))
+
+(global-set-key (kbd "M-°") 'shell-command-on-buffer)
+
 (setq inhibit-startup-message t)
 (setq major-mode 'text-mode)
 (setq-default major-mode 'text-mode)
