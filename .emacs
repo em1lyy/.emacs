@@ -281,7 +281,7 @@ where tabs are required"
      ("#3C3D37" . 100)))
  '(magit-diff-use-overlays nil)
  '(package-selected-packages
-   '(go-mode nim-mode zig-mode mix elixir-mode elcord rainbow-delimiters elfeed project-explorer powerline gruvbox-theme moe-theme markdown-mode))
+   '(nginx-mode go-mode nim-mode zig-mode elixir-mode elcord rainbow-delimiters elfeed powerline gruvbox-theme moe-theme markdown-mode))
  '(pdf-view-midnight-colors '("#fdf4c1" . "#282828"))
  '(pos-tip-background-color "#FFFACE")
  '(pos-tip-foreground-color "#272822")
