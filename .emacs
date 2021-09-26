@@ -254,6 +254,14 @@ where tabs are required"
 
 (global-set-key (kbd "M-°") 'shell-command-on-buffer)
 
+;; Window navigation needs to be quicker
+
+(defun other-window-backward ()
+  (interactive)
+  (other-window -1))
+
+(global-set-key (kbd "C-x O") 'other-window-backward)
+
 (setq inhibit-startup-message t)
 (setq major-mode 'text-mode)
 (setq-default major-mode 'text-mode)
