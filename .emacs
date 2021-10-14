@@ -262,6 +262,79 @@ where tabs are required"
 
 (global-set-key (kbd "C-x O") 'other-window-backward)
 
+;; Custom workspace/project manager
+
+(setq current-project-name nil)
+
+(defun kill-old-session-buffers ()
+  (interactive)
+  (mapc
+   (lambda (x)
+     (let ((name (buffer-name x)))
+       (unless (or (eq ?\s (aref name 0)) (eq ?* (aref name 0)))
+         (kill-buffer x))))
+   (buffer-list)))
+
+(defun make-directory-list (dir-list)
+  (mapcar
+   (lambda (dir)
+      (unless (file-directory-p dir)
+	(make-directory dir)))
+   dir-list))
+
+(defun build-completion-list ()
+  (make-directory-list
+   (list (concat user-emacs-directory "projects/")))
+  (directory-files (concat user-emacs-directory "projects/") nil "^\\([^.]\\|\\.[^.]\\|\\.\\..\\)"))
+
+(defun save-project (&optional pronamearg)
+  (interactive)
+  (let* ((proname (if pronamearg
+                      pronamearg
+                    (completing-read "Project Name: " (build-completion-list))))
+         (basepath (concat user-emacs-directory "projects/"))
+         (propath (concat basepath proname "/")))
+    (make-directory-list
+     (list basepath propath))
+    (desktop-save propath)
+    (setq current-project-name proname)))
+
+(defun save-current-project ()
+  (interactive)
+  (if current-project-name
+      (save-project current-project-name)
+    (error "No current project to save")))
+
+(defun save-current-project-and-release-lock ()
+  (interactive)
+  (if current-project-name
+      (let* ((propath (concat user-emacs-directory "projects/" current-project-name "/")))
+        (desktop-save propath t))
+    (message "No current project to save")))
+
+(defun load-project (&optional pronamearg)
+  (interactive)
+  (let* ((proname (if pronamearg
+                      pronamearg
+                    (completing-read "Project Name: " (build-completion-list))))
+         (basepath (concat user-emacs-directory "projects/"))
+         (propath (concat basepath proname "/")))
+    (make-directory-list
+     (list basepath propath))
+    (save-current-project-and-release-lock)
+    (kill-old-session-buffers)
+    (if (desktop-read propath)
+        (message (concat "Loaded project " proname))
+      (error "No such project"))))
+
+;;(add-hook 'kill-emacs-hook 'save-current-project-and-release-lock)
+
+(global-set-key (kbd "C-c d s") 'desktop-save)
+(global-set-key (kbd "C-c d r") 'desktop-read)
+(global-set-key (kbd "C-c p s") 'save-project)
+(global-set-key (kbd "C-c p S") 'save-current-project)
+(global-set-key (kbd "C-c p l") 'load-project)
+
 (setq inhibit-startup-message t)
 (setq major-mode 'text-mode)
 (setq-default major-mode 'text-mode)
