@@ -324,7 +324,9 @@ where tabs are required"
     (save-current-project-and-release-lock)
     (kill-old-session-buffers)
     (if (desktop-read propath)
-        (message (concat "Loaded project " proname))
+        (progn
+          (message (concat "Loaded project " proname))
+          (setq current-project-name proname))
       (error "No such project"))))
 
 ;;(add-hook 'kill-emacs-hook 'save-current-project-and-release-lock)
