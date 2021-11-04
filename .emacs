@@ -329,7 +329,7 @@ where tabs are required"
           (setq current-project-name proname))
       (error "No such project"))))
 
-;;(add-hook 'kill-emacs-hook 'save-current-project-and-release-lock)
+(add-hook 'kill-emacs-hook 'save-current-project-and-release-lock)
 
 (global-set-key (kbd "C-c d s") 'desktop-save)
 (global-set-key (kbd "C-c d r") 'desktop-read)
