@@ -41,7 +41,7 @@ where tabs are required"
 
 ;; Indent case in switch statement (because not doing so is ugly)
 (c-set-offset 'case-label '+)
-(c-set-offset 'cpp-macro '--)
+(c-set-offset 'cpp-macro -64)
 
 ;; Enable <backtab>
 (global-set-key (kbd "<backtab>") 'un-indent-by-removing-4-spaces)
@@ -57,6 +57,10 @@ where tabs are required"
       (when (looking-at "^    ")
         (replace-match "")))))
 
+;; C ElDoc mode!
+(add-hook 'c-mode-hook 'c-turn-on-eldoc-mode)
+(add-hook 'c++-mode-hook 'c-turn-on-eldoc-mode)
+
 ;; Remember: C-h c to find what a key does,
 ;; C-h w to find where a function is on the kbd.
 
@@ -71,7 +75,7 @@ where tabs are required"
 
 ;; Eval inline lisp in markdown-mode
 (defun markdown-eval-inline-lisp ()
-  "evaluates all inline lisp (marked by $`(expr)`$"
+  "evaluates all inline lisp (marked by $`(expr)`$)"
   (interactive)
   (save-excursion (goto-char (point-min))
                   (if (search-forward "$`" nil t)
@@ -115,10 +119,12 @@ where tabs are required"
         ("https://www.reddit.com/r/Lucina.rss" lucina)
         ("https://www.reddit.com/r/awwnime.rss" awwnime)
 ))
-(global-set-key (kbd "C-x w") 'elfeed)
+(global-set-key (kbd "C-c M-m f") 'elfeed)
 
 ;; Some keybinds
 (global-set-key (kbd "C-x C-k C-r") 'revert-buffer)
+(global-set-key (kbd "C-x C-ö") 'comment-line)  ; C-c C-c comment-region
+(global-set-key (kbd "C-x M-c") 'compile)       ; wanted to do C-x c but too similar to C-x C-c for my taste
 
 ;; Server
 (server-start)
@@ -206,6 +212,13 @@ where tabs are required"
 (global-set-key (kbd "M-p") 'move-line-region-up)
 (global-set-key (kbd "M-n") 'move-line-region-down)
 
+;; mark ring convenience
+(setq set-mark-command-repeat-pop 1)
+
+;; display-time-mode format
+(setq display-time-format "%H:%M %a, %d. %b")
+(setq display-time-default-load-average nil)
+
 ;; Python running, because the python.el built-in version sucks
 ;; IMO and is not compatible with my setup and requirements
 
@@ -236,7 +249,9 @@ where tabs are required"
      (t (error "Current buffer is not associated with a file"))))
    (t (error "Unsupported platform"))))
 
-(define-key python-mode-map (kbd "C-c C-b") 'python-run-current-buffer-file-in-shell)
+(add-hook 'python-mode-hook
+          (lambda ()
+            (define-key python-mode-map (kbd "C-c C-b") 'python-run-current-buffer-file-in-shell)))
 
 ;; Shell command on buffer
 ;;  * Operates on same buffer
@@ -329,6 +344,12 @@ where tabs are required"
           (setq current-project-name proname))
       (error "No such project"))))
 
+(defun save-and-unload-project ()
+  (interactive)
+  (save-current-project-and-release-lock)
+  (kill-old-session-buffers)
+  (setq current-project-name nil))
+
 (add-hook 'kill-emacs-hook 'save-current-project-and-release-lock)
 
 (global-set-key (kbd "C-c d s") 'desktop-save)
@@ -336,6 +357,79 @@ where tabs are required"
 (global-set-key (kbd "C-c p s") 'save-project)
 (global-set-key (kbd "C-c p S") 'save-current-project)
 (global-set-key (kbd "C-c p l") 'load-project)
+(global-set-key (kbd "C-c p u") 'save-and-unload-project)
+
+;; Abbrev-mode
+
+(setq abbrev-file-name "~/.emacs.d/abbrev_defs")
+(setq save-abbrevs 'silent)
+
+;; ERC
+
+(autoload 'erc "erc" "IRC client." t)
+(autoload 'erc-tls "erc" "IRC over TLS client." t)
+(require 'erc-services)
+(erc-services-mode 1)
+
+;; Make C-c RET (or C-c C-RET) send messages instead of RET.
+(define-key erc-mode-map (kbd "RET") nil)
+(define-key erc-mode-map (kbd "C-c RET") 'erc-send-current-line)
+(define-key erc-mode-map (kbd "C-c C-RET") 'erc-send-current-line)
+
+;; Interpret mIRC-style color commands in IRC chats
+(setq erc-interpret-mirc-color t)
+
+;; Kill buffers for channels after /part
+(setq erc-kill-buffer-on-part t)
+;; Kill buffers for private queries after quitting the server
+;(setq erc-kill-queries-on-quit t)
+;; Kill buffers for server messages after quitting the server
+(setq erc-kill-server-buffer-on-quit t)
+
+;; Custom Prompt
+(setq erc-prompt (lambda () (concat "[" (buffer-name) "]")))
+
+;; Coloured nicks
+
+;; Pool of colors to use when coloring IRC nicks.
+(setq erc-colors-list '("green" "blue" "red"
+                        "dark gray" "dark orange"
+                        "dark magenta" "maroon"
+                        "indian red" "black" "forest green"
+                        "midnight blue" "dark violet"))
+
+;; special colors for some people
+;(setq erc-nick-color-alist '(("John" . "blue")
+;                             ("Bob" . "red")))
+
+(defun erc-get-color-for-nick (nick)
+  "Gets a color for NICK. If NICK is in erc-nick-color-alist, use that color, else hash the nick and use a random color from the pool"
+  (or (cdr (assoc nick erc-nick-color-alist))
+      (nth
+       (mod (string-to-number
+             (substring (md5 (downcase nick)) 0 6) 16)
+            (length erc-colors-list))
+       erc-colors-list)))
+
+(defun erc-put-color-on-nick ()
+  "Modifies the color of nicks according to erc-get-color-for-nick"
+  (save-excursion
+    (goto-char (point-min))
+    (while (forward-word 1)
+      (setq bounds (bounds-of-thing-at-point 'word))
+      (setq word (buffer-substring-no-properties
+                  (car bounds) (cdr bounds)))
+      (when (or (and (erc-server-buffer-p) (erc-get-server-user word))
+                (and erc-channel-users (erc-get-channel-user word)))
+        (put-text-property (car bounds) (cdr bounds) 
+                           'face (cons 'foreground-color
+                                       (erc-get-color-for-nick word)))))))
+
+(add-hook 'erc-insert-modify-hook 'erc-put-color-on-nick)
+
+(add-hook 'erc-mode-hook (lambda () 
+                           (modify-syntax-entry ?\_ "w" nil)
+                           (modify-syntax-entry ?\- "w" nil)))
 
 (setq inhibit-startup-message t)
 (setq major-mode 'text-mode)
