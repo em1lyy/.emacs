@@ -334,14 +334,15 @@ where tabs are required"
                     (completing-read "Project Name: " (build-completion-list))))
          (basepath (concat user-emacs-directory "projects/"))
          (propath (concat basepath proname "/")))
-    (make-directory-list
-     (list basepath propath))
-    (save-current-project-and-release-lock)
-    (kill-old-session-buffers)
-    (if (desktop-read propath)
+    (if (file-directory-p propath)
         (progn
-          (message (concat "Loaded project " proname))
-          (setq current-project-name proname))
+          (save-current-project-and-release-lock)
+          (kill-old-session-buffers)
+          (if (desktop-read propath)
+              (progn
+                (message (concat "Loaded project " proname))
+                (setq current-project-name proname))
+            (error "Loading project failed")))
       (error "No such project"))))
 
 (defun save-and-unload-project ()
